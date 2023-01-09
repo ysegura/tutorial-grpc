@@ -1,0 +1,57 @@
+// Opciones de configuración: versión Protobuff, paquetería, etc.
+syntax = "proto3";
+
+option java_package = "es.ysegura.grpctutorial.protobuff";
+option java_multiple_files = true;
+option java_outer_classname = "RouteGuideProto";
+option objc_class_prefix = "RTG";
+
+// Definición del servicio con sus métodos
+service RouteGuide {
+
+  // Ejemplo de una llamada con respuesta única
+  rpc GetFeature(Point) returns (Feature){}
+
+  // Ejemplo de llamada con respuesta en stream
+  rpc ListFeatures(Rectangle) returns (stream Feature){}
+
+  // Ejemplo de llamada con parámetro en stream y respuesta única
+  rpc RecordRoute(stream Point) returns (RouteSummary){}
+
+  // Ejemplo de llamada con entrada y respuesta en stream
+  rpc RouteChat(stream RouteNote) returns (stream RouteNote){}
+
+}
+
+// Mensajes intercambiados
+
+message Point{
+  int32 latitude = 1;
+  int32 longitude = 2;
+}
+
+message Rectangle {
+  Point lo = 1;
+  Point hi = 2;
+}
+
+message Feature {
+  string name = 1;
+  Point location = 2;
+}
+
+message FeatureDatabase {
+  repeated Feature feature = 1;
+}
+
+message RouteNote {
+  Point location = 1;
+  string message = 2;
+}
+
+message RouteSummary {
+  int32 point_count = 1;
+  int32 feature_count = 2;
+  int32 distance = 3;
+  int32 elapsed_time = 4;
+}
